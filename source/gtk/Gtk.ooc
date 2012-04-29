@@ -59,6 +59,13 @@ gtk_quit_add_destroy: extern func (Int, _GObject)
 
 gtk_get_current_event_time: extern func -> UInt
 
+Justification: extern(GtkJustification) enum {
+    left: extern(GTK_JUSTIFY_LEFT),
+    right: extern(GTK_JUSTIFY_RIGHT),
+    center: extern(GTK_JUSTIFY_CENTER),
+    fill: extern(GTK_JUSTIFY_FILL)
+}
+
 GBool: cover from gboolean extends Bool
 GInt: cover from gint extends SSizeT
 GUInt: cover from guint extends SizeT
