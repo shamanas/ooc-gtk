@@ -74,3 +74,4 @@ GULong: cover from gulong extends ULong
 GPointer: cover from gpointer extends Pointer
 GChar: cover from gchar extends Char
 GString: cover from gchar* extends String
+GUniChar: cover from gunichar extends UInt32

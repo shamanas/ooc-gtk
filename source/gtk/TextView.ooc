@@ -1,5 +1,5 @@
 use gtk, gdk
-import gtk/[Container, Widget]
+import gtk/[Container, Widget, TextIter, TextBuffer]
 import gdk/Event
 
 TextWindowType: extern(GtkTextWindowType) enum {
@@ -18,7 +18,7 @@ TextChildAnchor: cover from GtkTextChildAnchor* {
     deleted?: extern(gtk_text_child_anchor_get_deleted) func -> GBool
 }
 
-// Need TextBuffer, TextMark, TextIter, GList, PangoTabArray, Adjustment
+// Need TextBuffer, TextMark, TextIter, GList, PangoTabArray, Adjustment, GSList, TextAttributes for complete class
 
 TextView: cover from GtkTextView* extends Container {
 
