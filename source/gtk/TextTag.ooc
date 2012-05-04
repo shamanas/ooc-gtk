@@ -68,4 +68,25 @@ TextTag: cover from GtkTextTag* extends _GObject {
     //tagEvent: extern(gtk_text_tag_event) func(eventObject: _GObject, event: Event, iter: TextIter) -> Bool
 }
 
+TextTagTable: cover from GtkTextTagTable* extends _GObject {
+    new: static extern(gtk_text_tag_table_new) func -> This
+    add: extern(gtk_text_tag_table_add) func(tag: TextTag)
+    remove: extern(gtk_text_tag_table_remove) func(tag: TextTag)
+    lookup: func(name: String) -> TextTag {
+        gtk_text_tag_table_lookup(this, name)
+    }
+
+    // Raw C function
+    each: extern(gtk_text_tag_table_foreach) func~raw(f: Func(TextTag, Pointer), data: Pointer)
+    // An ooc closure takes the context as a last argument so we can pass it as out data ;)
+    each: func~closure(f: Func(TextTag)) {
+        thunk := f as Closure thunk as Func(TextTag, Pointer)
+        context := f as Closure context
+        each~raw(thunk, context)
+    }
+
+    getSize: extern(gtk_text_tag_table_get_size) func -> Int
+}
+
+gtk_text_tag_table_lookup: extern func(TextTagTable, CString) -> TextTag
 gtk_text_tag_new: extern func(CString) -> TextTag
