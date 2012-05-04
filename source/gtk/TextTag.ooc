@@ -60,7 +60,7 @@ TextTag: cover from GtkTextTag* extends _GObject {
         get {
             getPriority()
         }
-        set(priority: Int) {
+        set(priority) {
             setPriority(priority)
         }
     }
@@ -77,10 +77,10 @@ TextTagTable: cover from GtkTextTagTable* extends _GObject {
     }
 
     // Raw C function
-    each: extern(gtk_text_tag_table_foreach) func~raw(f: Func(TextTag, Pointer), data: Pointer)
+    each: extern(gtk_text_tag_table_foreach) func~raw(f: Pointer, data: Pointer)
     // An ooc closure takes the context as a last argument so we can pass it as out data ;)
     each: func~closure(f: Func(TextTag)) {
-        thunk := f as Closure thunk as Func(TextTag, Pointer)
+        thunk := f as Closure thunk
         context := f as Closure context
         each~raw(thunk, context)
     }

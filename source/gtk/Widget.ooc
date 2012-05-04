@@ -2,6 +2,82 @@ use gdk, gtk
 import gtk/[Gtk, _GObject, Window]
 import gdk/Drawable
 
+Adjustment: cover from GtkAdjustment* extends _GObject {
+    new: static extern(gtk_adjustment_new) func(value, lower, upper, stepIncr, pageIncr, pageSize: Double) -> This
+
+    getValue: extern(gtk_adjustment_get_value) func -> Double
+    setValue: extern(gtk_adjustment_set_value) func(value: Double)
+    value: Double {
+        get {
+            getValue()
+        }
+        set(value) {
+            setValue(value)
+        }
+    }
+
+    clampPage: extern(gtk_adjustment_clamp_page) func(lower, upper: Double)
+    changed: extern(gtk_adjustment_changed) func
+    valueChanged: extern(gtk_adjustment_value_changed) func
+
+    configure: extern(gtk_adjustment_configure) func(value, lower, upper, stepIncr, pageIncr, pageSize: Double)
+
+    getLower: extern(gtk_adjustment_get_lower) func -> Double
+    setLower: extern(gtk_adjustment_set_lower) func(lower: Double)
+    lower: Double {
+        get {
+            getLower()
+        }
+        set(lower) {
+            setLower(lower)
+        }
+    }
+
+    getPageIncrement: extern(gtk_adjustment_get_page_increment) func -> Double
+    setPageIncrement: extern(gtk_adjustment_set_page_increment) func(pageIncr: Double)
+    pageIncrement: Double {
+        get {
+            getPageIncrement()
+        }
+        set(pageIncr) {
+            setPageIncrement(pageIncr)
+        }
+    }
+
+    getPageSize: extern(gtk_adjustment_get_page_size) func -> Double
+    setPageSize: extern(gtk_adjustment_set_page_size) func(pageSize: Double)
+    pageSize: Double {
+        get {
+            getPageSize()
+        }
+        set(pageSize) {
+            setPageSize(pageSize)
+        }
+    }
+
+    getStepIncrement: extern(gtk_adjustment_get_step_increment) func -> Double
+    setStepIncrement: extern(gtk_adjustment_set_step_increment) func(stepIncr: Double)
+    stepIncrement: Double {
+        get {
+            getStepIncrement()
+        }
+        set(stepIncr) {
+            setStepIncrement(stepIncr)
+        }
+    }
+
+    getUpper: extern(gtk_adjustment_get_upper) func -> Double
+    setUpper: extern(gtk_adjustment_set_upper) func(upper: Double)
+    upper: Double {
+        get {
+            getUpper()
+        }
+        set(upper) {
+            setUpper(upper)
+        }
+    }
+}
+
 WidgetStruct: cover from GtkWidget {
 	window: extern GdkWindow*
 	allocation: extern GtkAllocation

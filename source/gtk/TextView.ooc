@@ -1,5 +1,5 @@
 use gtk, gdk
-import gtk/[Container, Widget, TextIter, TextBuffer, TextTag]
+import gtk/[Gtk, Container, Widget, TextIter, TextBuffer, TextTag]
 import gdk/Event
 
 TextWindowType: extern(GtkTextWindowType) enum {
@@ -46,7 +46,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getBuffer()
         }
-        set(buffer: TextBuffer) {
+        set(buffer) {
             setBuffer(buffer)
         }
     }
@@ -54,19 +54,19 @@ TextView: cover from GtkTextView* extends Container {
     /**
      * Scroll the TextView to mark
      */
-    scrollToMark: extern(gtk_text_view_scroll_to_mark) func(mark: TextMark, margin: GDouble, align?: Bool, xalign,yalign: GDouble)
+    scrollToMark: extern(gtk_text_view_scroll_to_mark) func(mark: TextMark, margin: Double, align?: Bool, xalign,yalign: Double)
 
     /**
      * Scroll the TextView to iterator
      */
-    scrollToIter: extern(gtk_text_view_scroll_to_iter) func(iter: TextIter, margin: GDouble, align?: Bool, xalign,yalign: GDouble) -> Bool
+    scrollToIter: extern(gtk_text_view_scroll_to_iter) func(iter: TextIter, margin: Double, align?: Bool, xalign,yalign: Double) -> Bool
 
     /**
      * Scrolls TextView the minimum distance such that mark is contained within the visible area of the widget
      */
     scrollMarkOnScreen: extern(gtk_text_view_scroll_mark_onscreen) func(mark: TextMark)
 
-    /**
+    /*
      * Moves a mark within the buffer so that it's located within the currently-visible text area
      */
     //moveMarkOnScreen: extern(gtk_text_view_move_mark_onscreen) func(mark: TextMark) -> Bool
@@ -86,7 +86,7 @@ TextView: cover from GtkTextView* extends Container {
         rect
     }
 
-    /**
+    /*
      * Gets a rectangle which roughly contains the character at iter. The rectangle position is in buffer coordinates
      */
     //getIterLocation: extern(gtk_text_view_get_iter_location) func ~pointer (iter: TextIter, location: GdkRectangle*)
@@ -130,7 +130,7 @@ TextView: cover from GtkTextView* extends Container {
      * Retrieves the iterator pointing to the character at buffer coordinates x and y. Buffer coordinates are coordinates for the entire buffer, not just the currently-displayed portion. Note that this is different from TextView getIterAtLocation, which returns cursor locations, i.e. positions between characters.
      * trailing: if non-NULL, location to store an integer indicating where in the grapheme the user clicked. It will either be zero, or the number of characters in the grapheme. 0 represents the trailing edge of the grapheme.
      */
-    getIterAtPosition: extern(gtk_view_get_iter_at_position) func ~pointer (iter: TextIter, trailing: Int*, x,y: Int)
+    getIterAtPosition: extern(gtk_text_view_get_iter_at_position) func ~pointer (iter: TextIter, trailing: Int*, x,y: Int)
     getIterAtPosition: func ~returns (x,y: Int, trailing: Int* = null) -> TextIter {
         iter: TextIter
         getIterAtPosition(iter,trailing,x,y)
@@ -223,7 +223,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getWrapMode()
         }
-        set(mode: WrapMode) {
+        set(mode) {
             setWrapMode(mode)
         }
     }
@@ -237,7 +237,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getEditable?()
         }
-        set(editable: Bool) {
+        set(editable) {
             setEditable?(editable)
         }
      }
@@ -251,7 +251,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getCursorVisible?()
         }
-        set(cursorVisible: Bool) {
+        set(cursorVisible) {
             setCursorVisible?(cursorVisible)
         }
     }
@@ -265,7 +265,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getOverwrite?()
         }
-        set(overwrite: Bool) {
+        set(overwrite) {
             setOverwrite?(overwrite)
         }
     }
@@ -279,7 +279,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getPixelsAboveLines()
         }
-        set(pixels: Int) {
+        set(pixels) {
             setPixelsAboveLines(pixels)
         }
     }
@@ -293,7 +293,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getPixelsBelowLines()
         }
-        set(pixels: Int) {
+        set(pixels) {
             setPixelsBelowLines(pixels)
         }
     }
@@ -307,7 +307,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getPixelsInsideWrap()
         }
-        set(pixels: Int) {
+        set(pixels) {
             setPixelsInsideWrap(pixels)
         }
     }
@@ -315,13 +315,13 @@ TextView: cover from GtkTextView* extends Container {
     /**
      * The default justification of text in text_view. Tags in the view's buffer may override the default.
      */
-    getJustification: extern(gtk_text_view_get_justification) -> Justification
+    getJustification: extern(gtk_text_view_get_justification) func -> Justification
     setJustification: extern(gtk_text_view_set_justification) func(just: Justification)
     justification: Justification {
         get {
             getJustification()
         }
-        set(just: Justification) {
+        set(just) {
             setJustification(just)
         }
     }
@@ -335,7 +335,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getLeftMargin()
         }
-        set(margin: Int) {
+        set(margin) {
             setLeftMargin(margin)
         }
     }
@@ -349,8 +349,8 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getRightMargin()
         }
-        set(margin: Int) {
-            setRightMArgin(margin)
+        set(margin) {
+            setRightMargin(margin)
         }
     }
 
@@ -363,12 +363,12 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getIndent()
         }
-        set(indent: Int) {
+        set(indent) {
             setIndent(indent)
         }
     }
 
-    /**
+    /*
      * The default tab stops for paragraphs in the text view. Tags in the buffer may override the default.
      */
     /*tabs: PangoTabArray {
@@ -385,7 +385,7 @@ TextView: cover from GtkTextView* extends Container {
         get {
             getAcceptsTab?()
         }
-        set(acceptsTab: Bool) {
+        set(acceptsTab) {
             setAcceptsTab?(acceptsTab)
         }
     }

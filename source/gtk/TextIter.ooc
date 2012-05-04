@@ -13,7 +13,7 @@ TextMark: cover from GtkTextMark*  extends _GObject {
         get {
             getVisible?()
         }
-        set(setting: Bool) {
+        set(setting) {
             setVisible?(setting)
         }
     }
@@ -97,17 +97,17 @@ TextIter: cover from GtkTextIter* {
         gtk_text_iter_get_visible_text(this,end) as CString toString()
     }
 
-    /**
+    /*
      * If the element at iter is a pixbuf, the pixbuf is returned (with no new reference count added). Otherwise, null is returned.
      */
     //getPixbuf: extern(gtk_text_iter_get_pixbuf) func -> GdkPixbuf
 
-    /**
+    /*
      * Returns a list of all TextMark at this location. Because marks are not iterable (they don't take up any "space" in the buffer, they are just marks in between iterable locations), multiple marks can exist in the same place. The returned list is not in any meaningful order.
      */
     //getMarks: extern(gtk_text_iter_get_marks) func -> GSList
 
-    /**
+    /*
      * Returns a list of TextTag that are toggled on or off at this point. (If toggled_on is true, the list contains tags that are toggled on.) If a tag is toggled on at iter, then some non-empty range of characters following iter has that tag applied to it. If a tag is toggled off, then some non-empty range following iter does not have the tag applied to it.
      */
     //getToggledTags: extern(gtk_text_iter_get_toggled_tags) func(toggled_on: Bool) -> GSList
@@ -137,7 +137,7 @@ TextIter: cover from GtkTextIter* {
      */
     hasTag?: extern(gtk_text_iter_has_tag) func(tag: TextTag) -> Bool
 
-    /**
+    /*
      * Returns a list of tags that apply to iter, in ascending order of priority (highest-priority tags are last). The TextTag in the list don't have a reference added, but you have to free the list itself.
      */
     //getTags: extern(gtk_text_iter_get_tags) func -> GSList
@@ -217,7 +217,7 @@ TextIter: cover from GtkTextIter* {
         (attr, ret)
     }
 
-    /**
+    /*
      * A convenience wrapper around TextIter getAttributes, which returns the language in effect at iter. If no tags affecting language apply to iter, the return value is identical to that of Gtk getDefaultLanguage.
      */
     //getLanguage: extern(gtk_text_iter_get_language) func -> PangoLanguage
@@ -293,16 +293,16 @@ TextIter: cover from GtkTextIter* {
     backwardToTagToggle: extern(gtk_text_iter_backward_to_tag_toggle) func(tag: TextTag) -> Bool
 
     // Raw function methods
-    forwardFindChar: extern(gtk_text_iter_forward_find_char) func~raw(pred: Func(UInt32, Pointer) -> Bool, user_data: Pointer, limit: const This) -> Bool
-    backwardFindChar: extern(gtk_text_iter_backward_find_char) func~raw(pred: Func(UInt32, Pointer) -> Bool, user_data: Pointer, limit: const This) -> Bool
+    forwardFindChar: extern(gtk_text_iter_forward_find_char) func~raw(pred: Pointer, user_data: Pointer, limit: const This) -> Bool
+    backwardFindChar: extern(gtk_text_iter_backward_find_char) func~raw(pred: Pointer, user_data: Pointer, limit: const This) -> Bool
     // In an ooc closure, the context is passed as a last argument, so we can pass the context to user_data
     forwardFindChar: func~closure(pred: Func(UInt32) -> Bool, limit: const This) -> Bool {
-        thunk := pred as Closure thunk as Func(UInt32, Pointer) -> Bool
+        thunk := pred as Closure thunk
         context := pred as Closure context
         forwardFindChar~raw(thunk, context, limit)
     }
     backwardFindChar: func~closure(pred: Func(UInt32) -> Bool, limit: const This) -> Bool {
-        thunk := pred as Closure thunk as Func(UInt32, Pointer) -> Bool
+        thunk := pred as Closure thunk
         context := pred as Closure context
         backwardFindChar~raw(thunk, context, limit)
     }

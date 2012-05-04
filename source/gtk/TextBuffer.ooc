@@ -1,5 +1,5 @@
 use gtk
-import gtk/[Gtk, _GObject, TextIter, TextTag]
+import gtk/[Gtk, _GObject, TextIter, TextTag, TextView]
 
 TextBufferTargetInfo: extern(GtkTextBufferTargetInfo) enum {
     bufferContents: extern(GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS),
@@ -143,7 +143,7 @@ TextBuffer: cover from GtkTextBuffer* extends _GObject {
     getBounds: extern(gtk_text_buffer_get_bounds) func~pointers(start,end: TextIter)
     getBounds: func~returnsTuple -> (TextIter, TextIter) {
         start, end: TextIter
-        getBounds~pointers(start, send)
+        getBounds~pointers(start, end)
         (start, end)
     }
 
@@ -153,7 +153,7 @@ TextBuffer: cover from GtkTextBuffer* extends _GObject {
         get {
             getModified?()
         }
-        set(setting: Bool) {
+        set(setting) {
             setModified?(setting)
         }
     }
@@ -163,7 +163,7 @@ TextBuffer: cover from GtkTextBuffer* extends _GObject {
     //copyClipboard: extern(gtk_text_buffer_copy_clipboard) func(clipboard: Clipboard)
     //cutClipboard: extern(gtk_text_buffer_cut_clipboard) func(clipboard: Clipboard)
 
-    getSelectionBounds: extern(gtk_text_buffer_get_selection_bounds) func~pointers(start,end) -> Bool
+    getSelectionBounds: extern(gtk_text_buffer_get_selection_bounds) func~pointers(start,end: TextIter) -> Bool
     getSelectionBounds: func~returnsTuple -> (TextIter, TextIter, Bool) {
         start, end: TextIter
         (start, end, getSelectionBounds~pointers(start, end))
