@@ -208,89 +208,155 @@ TextView: cover from GtkTextView* extends Container {
      */
     moveChild: extern(gtk_text_view_move_child) func(child: Widget, xpos,ypos: Int)
 
+    getWrapMode: extern(gtk_text_view_get_wrap_mode) func -> WrapMode
+    setWrapMode: extern(gtk_text_view_set_wrap_mode) func(mode: WrapMode)
     wrapMode: WrapMode {
-        get: extern(gtk_text_view_get_wrap_mode)
-        set: extern(gtk_text_view_set_wrap_mode)
+        get {
+            getWrapMode()
+        }
+        set(mode: WrapMode) {
+            setWrapMode(mode)
+        }
     }
 
     /**
      * The default editability of the GtkTextView. You can override this default setting with tags in the buffer, using the "editable" attribute of tags.
      */
+     getEditable?: extern(gtk_text_view_get_editable) func -> Bool
+     setEditable?: extern(gtk_text_view_set_editable) func(editable: Bool)
      editable?: Bool {
-        get: extern(gtk_text_view_get_editable)
-        set: extern(gtk_text_view_set_editable)
+        get {
+            getEditable?()
+        }
+        set(editable: Bool) {
+            setEditable?(editable)
+        }
      }
 
     /**
      * Whether the insertion point is displayed. A buffer with no editable text probably shouldn't have a visible cursor, so you may want to turn the cursor off.
      */
+    getCursorVisible?: extern(gtk_text_view_get_cursor_visible) func -> Bool
+    setCursorVisible?: extern(gtk_text_view_set_cursor_visible) func(cursorVisible: Bool)
     cursorVisible?: Bool {
-        get: extern(gtk_text_view_get_cursor_visible)
-        set: extern(gtk_text_view_set_cursor_visible)
+        get {
+            getCursorVisible?()
+        }
+        set(cursorVisible: Bool) {
+            setCursorVisible?(cursorVisible)
+        }
     }
 
     /**
      * Whether the TextView is in overwrite mode or not.
      */
+    getOverwrite?: extern(gtk_text_view_get_overwrite) func -> Bool
+    setOverwrite?: extern(gtk_text_view_set_overwrite) func(overwrite: Bool)
     overwrite?: Bool {
-        get: extern(gtk_text_view_get_overwrite)
-        set: extern(gtk_text_view_set_overwrite)
+        get {
+            getOverwrite?()
+        }
+        set(overwrite: Bool) {
+            setOverwrite?(overwrite)
+        }
     }
 
     /**
      * The default number of blank pixels above paragraphs in the text view. Tags in the buffer for the text view may override the defaults.
      */
+    getPixelsAboveLines: extern(gtk_text_view_get_pixels_above_lines) func -> Int
+    setPixelsAboveLines: extern(gtk_text_view_set_pixels_above_lines) func(pixels: Int)
     pixelsAboveLines: Int {
-        get: extern(gtk_text_view_get_pixels_above_lines)
-        set: extern(gtk_text_view_set_pixels_above_lines)
+        get {
+            getPixelsAboveLines()
+        }
+        set(pixels: Int) {
+            setPixelsAboveLines(pixels)
+        }
     }
 
     /**
      * The default number of blank pixels below paragraphs in the text view. Tags in the buffer for the text view may override the defaults.
      */
+    getPixelsBelowLines: extern(gtk_text_view_get_pixels_below_lines) func -> Int
+    setPixelsBelowLines: extern(gtk_text_view_set_pixels_below_lines) func(pixels: Int)
     pixelsBelowLines: Int {
-        get: extern(gtk_text_view_get_pixels_below_lines)
-        set: extern(gtk_text_view_set_pixels_below_lines)
+        get {
+            getPixelsBelowLines()
+        }
+        set(pixels: Int) {
+            setPixelsBelowLines(pixels)
+        }
     }
 
     /**
      * Sets the default number of pixels of blank space to leave between display/wrapped lines within a paragraph. May be overridden by tags in the text view's buffer.
      */
+    getPixelsInsideWrap: extern(gtk_text_view_get_pixels_inside_wrap) func -> Int
+    setPixelsInsideWrap: extern(gtk_text_view_set_pixels_inside_wrap) func(pixels: Int)
     pixelsInsideWrap: Int {
-        get: extern(gtk_text_view_get_pixels_inside_wrap)
-        set: extern(gtk_text_view_set_pixels_inside_wrap)
+        get {
+            getPixelsInsideWrap()
+        }
+        set(pixels: Int) {
+            setPixelsInsideWrap(pixels)
+        }
     }
 
     /**
      * The default justification of text in text_view. Tags in the view's buffer may override the default.
      */
+    getJustification: extern(gtk_text_view_get_justification) -> Justification
+    setJustification: extern(gtk_text_view_set_justification) func(just: Justification)
     justification: Justification {
-        get: extern(gtk_text_view_get_justification)
-        set: extern(gtk_text_view_set_justification)
+        get {
+            getJustification()
+        }
+        set(just: Justification) {
+            setJustification(just)
+        }
     }
 
     /**
      * The default left margin for text in text_view. Tags in the buffer may override the default.
      */
+    getLeftMargin: extern(gtk_text_view_get_left_margin) func -> Int
+    setLeftMargin: extern(gtk_text_view_set_left_margin) func(margin: Int)
     leftMargin: Int {
-        get: extern(gtk_text_view_get_left_margin)
-        set: extern(gtk_text_view_set_left_margin)
+        get {
+            getLeftMargin()
+        }
+        set(margin: Int) {
+            setLeftMargin(margin)
+        }
     }
 
     /**
      * The default right margin for text in the text view. Tags in the buffer may override the default.
      */
+    getRightMargin: extern(gtk_text_view_get_right_margin) func -> Int
+    setRightMargin: extern(gtk_text_view_set_right_margin) func(margin: Int)
     rightMargin: Int {
-        get: extern(gtk_text_view_get_right_margin)
-        set: extern(gtk_text_view_set_right_margin)
+        get {
+            getRightMargin()
+        }
+        set(margin: Int) {
+            setRightMArgin(margin)
+        }
     }
 
     /**
      * The default indentation for paragraphs in the text view. Tags in the buffer may override the default.
      */
+    getIndent: extern(gtk_text_view_get_indent) func -> Int
+    setIndent: extern(gtk_text_view_set_indent) func(indent: Int)
     indent: Int {
-        get: extern(gtk_text_view_get_indent)
-        set: extern(gtk_text_view_set_indent)
+        get {
+            getIndent()
+        }
+        set(indent: Int) {
+            setIndent(indent)
+        }
     }
 
     /**
@@ -304,9 +370,15 @@ TextView: cover from GtkTextView* extends Container {
     /**
      * Sets the behavior of the text widget when the Tab key is pressed. If acceptsTab? is true, a tab character is inserted. If acceptsTab? is false the keyboard focus is moved to the next widget in the focus chain.
      */
+    getAcceptsTab?: extern(gtk_text_view_get_accepts_tab) func -> Bool
+    setAcceptsTab?: extern(gtk_text_view_set_accepts_tab) func(acceptsTab: Bool)
     acceptsTab?: Bool {
-        get: extern(gtk_text_view_get_accepts_tab)
-        set: extern(gtk_text_view_set_accepts_tab)
+        get {
+            getAcceptsTab?()
+        }
+        set(acceptsTab: Bool) {
+            setAcceptsTab?(acceptsTab)
+        }
     }
 
     /**
