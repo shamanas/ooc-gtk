@@ -46,7 +46,7 @@ TextAttributes: cover from GtkTextAttributes {
     new: static extern(gtk_text_attributes_new) func -> This*
     copy: extern(gtk_text_attributes_copy) func@ -> This*
     copyValues: extern(gtk_text_attributes_copy_values) func@(dest: This*)
-    unref: extern(gtk_text_attributes_unref) 
+    unref: extern(gtk_text_attributes_unref)  func@
 }
 
 TextTag: cover from GtkTextTag* extends _GObject {
