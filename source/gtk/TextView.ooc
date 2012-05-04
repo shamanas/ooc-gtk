@@ -99,43 +99,43 @@ TextView: cover from GtkTextView* extends Container {
     /**
      * Gets the GtkTextIter at the start of the line containing the coordinate y. y is in buffer coordinates. If non-null, line_top will be filled with the coordinate of the top edge of the line.
      */
-    //getLineAtY: extern(gtk_text_view_get_line_at_y) func ~pointer (target: TextIter, y: Int, line_top: Int*)
-    /*getLineAtY: func ~returns (y: Int, line_top: Int* = null) -> TextIter {
+    getLineAtY: extern(gtk_text_view_get_line_at_y) func ~pointer (target: TextIter, y: Int, line_top: Int*)
+    getLineAtY: func ~returns (y: Int, line_top: Int* = null) -> TextIter {
         target: TextIter = null
         getLineAtY(target,y,line_top)
         target
-    }*/
+    }
 
     /**
      * Gets the y coordinate of the top of the line containing iter, and the height of the line. The coordinate is a buffer coordinate
      */
-    //getLineYRange: extern(gtk_text_view_get_line_yrange) func ~pointers (iter: TextIter, y,height: Int*)
-    /*getLineYRange: func ~returnsTuple (iter: TextIter) -> (Int, Int) {
+    getLineYRange: extern(gtk_text_view_get_line_yrange) func ~pointers (iter: TextIter, y,height: Int*)
+    getLineYRange: func ~returnsTuple (iter: TextIter) -> (Int, Int) {
         y,height: Int
         getLineYRange(iter,y&,height&)
         (y,height)
-    }*/
+    }
 
     /**
      * Retrieves the iterator at buffer coordinates x and y. Buffer coordinates are coordinates for the entire buffer, not just the currently-displayed portion.
      */
-    //getIterAtLocation: extern(gtk_text_view_get_iter_at_location) func ~pointer (iter: TextIter, x,y: Int)
-    /*getIterAtLocation: func ~returns (x,y: Int) -> TextIter {
+    getIterAtLocation: extern(gtk_text_view_get_iter_at_location) func ~pointer (iter: TextIter, x,y: Int)
+    getIterAtLocation: func ~returns (x,y: Int) -> TextIter {
         iter: TextIter
         getIterAtLocation(iter,x,y)
         iter
-    }*/
+    }
 
     /**
      * Retrieves the iterator pointing to the character at buffer coordinates x and y. Buffer coordinates are coordinates for the entire buffer, not just the currently-displayed portion. Note that this is different from TextView getIterAtLocation, which returns cursor locations, i.e. positions between characters.
      * trailing: if non-NULL, location to store an integer indicating where in the grapheme the user clicked. It will either be zero, or the number of characters in the grapheme. 0 represents the trailing edge of the grapheme.
      */
-    //getIterAtPosition: extern(gtk_view_get_iter_at_position) func ~pointer (iter: TextIter, trailing: Int*, x,y: Int)
-    /*getIterAtPosition: func ~returns (x,y: Int, trailing: Int* = null) -> TextIter {
+    getIterAtPosition: extern(gtk_view_get_iter_at_position) func ~pointer (iter: TextIter, trailing: Int*, x,y: Int)
+    getIterAtPosition: func ~returns (x,y: Int, trailing: Int* = null) -> TextIter {
         iter: TextIter
         getIterAtPosition(iter,trailing,x,y)
         iter
-    }*/
+    }
 
     /**
      * Converts coordinate (buffer_x, buffer_y) to coordinates for the window win, and stores the result in (window_x, window_y)
