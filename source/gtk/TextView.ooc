@@ -1,5 +1,5 @@
 use gtk, gdk
-import gtk/[Container, Widget, TextIter, TextBuffer]
+import gtk/[Container, Widget, TextIter, TextBuffer, TextTag]
 import gdk/Event
 
 TextWindowType: extern(GtkTextWindowType) enum {
@@ -384,7 +384,7 @@ TextView: cover from GtkTextView* extends Container {
     /**
      * Obtains a copy of the default text attributes. These are the attributes used for text unless a tag overrides them.
      */
-    getDefaultAttributes: extern(gtk_text_view_get_default_attributes) func -> TextAttributes
+    getDefaultAttributes: extern(gtk_text_view_get_default_attributes) func -> TextAttributes*
 
     /**
      * Allow the TextView input method to internally handle key press and release events. If this function returns true, then no further processing should be done for this key event. See IMContext filterKeypress. Note that you are expected to call this function from your handler when overriding key event handling. This is needed in the case when you need to insert your own key handling between the input method and the default key event handling of the TextView.

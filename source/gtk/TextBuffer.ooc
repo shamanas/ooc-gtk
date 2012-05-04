@@ -1,5 +1,5 @@
 use gtk
-import gtk/[Gtk, _GObject, TextIter]
+import gtk/[Gtk, _GObject, TextIter, TextTag]
 
 TextBufferTargetInfo: extern(GtkTextBufferTargetInfo) enum {
     bufferContents: extern(GTK_TEXT_BUFFER_TARGET_INFO_BUFFER_CONTENTS),

@@ -149,6 +149,12 @@ GdkEventMask: enum {
   ALL_EVENTS_MASK           = 0x3FFFFE 
 }
 
+TextDirection: extern(GtkTextDirection) enum {
+    none: extern(GTK_TEXT_DIR_NONE),
+    ltr: extern(GTK_TEXT_DIR_LTR),
+    rtl: extern(GTK_TEXT_DIR_RTL)
+}
+
 GTK_WIDGET_REALIZED: extern func (Widget) -> Bool
 
 GdkWindow: extern cover

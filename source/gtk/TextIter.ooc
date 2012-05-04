@@ -1,5 +1,5 @@
 use gtk
-import gtk/[TextBuffer, Gtk, TextView]
+import gtk/[TextBuffer, Gtk, TextView, TextTag]
 
 TextSearchFlags: extern(GtkTextSearchFlags) enum {
     visibleOnly: extern(GTK_TEXT_SEARCH_VISIBLE_ONLY),
@@ -187,7 +187,12 @@ TextIter: cover from GtkTextIter* {
     /**
      * Computes the effect of any tags applied to this spot in the text. The values parameter should be initialized to the default settings you wish to use if no tags are in effect. You'd typically obtain the defaults from TextView getDefaultAttributes. TextIter getAttributes will modify values, applying the effects of any tags present at iter. If any tags affected values, the function returns true.
      */
-    getAttributes: extern(gtk_text_iter_get_attributes) func(values: TextAttributes) -> Bool
+    getAttributes: extern(gtk_text_iter_get_attributes) func~pointer(values: TextAttributes*) -> Bool
+    getAttributes: func~returnsTuple -> (TextAttributes, Bool) {
+        attr: TextAttributes
+        ret := getAttributes~pointer(attr&)
+        (attr, ret)
+    }
 
     /**
      * A convenience wrapper around TextIter getAttributes, which returns the language in effect at iter. If no tags affecting language apply to iter, the return value is identical to that of Gtk getDefaultLanguage.
