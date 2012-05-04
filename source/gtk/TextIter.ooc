@@ -1,5 +1,28 @@
 use gtk
-import gtk/[TextBuffer, Gtk, TextView, TextTag]
+import gtk/[TextBuffer, Gtk, TextView, TextTag, _GObject]
+
+TextMark: cover from GtkTextMark*  extends _GObject {
+    new: static func(name: String, leftGravity: Bool) -> This {
+        gtk_text_mark_new(name, leftGravity)
+    }
+
+    setVisible?: extern(gtk_text_mark_set_visible) func(setting: Bool)
+    getVisible?: extern(gtk_text_mark_get_visible) func -> Bool
+
+    visible?: Bool {
+        get {
+            getVisible?()
+        }
+        set(setting: Bool) {
+            setVisible?(setting)
+        }
+    }
+
+    deleted?: extern(gtk_text_mark_get_deleted) func -> Bool
+    getName: extern(gtk_text_mark_get_name) func -> CString
+    getBuffer: extern(gtk_text_mark_get_buffer) func -> TextBuffer
+    getLeftGravity: extern(gtk_text_mark_get_left_gravity) func -> Bool
+}
 
 TextSearchFlags: extern(GtkTextSearchFlags) enum {
     visibleOnly: extern(GTK_TEXT_SEARCH_VISIBLE_ONLY),
@@ -296,6 +319,7 @@ TextIter: cover from GtkTextIter* {
 operator == (l,r: TextIter) -> Bool { l equals?(r) }
 operator <=> (l,r: TextIter) -> Int { l compare(r) }
 
+gtk_text_mark_new: extern func(CString, Bool) -> TextMark
 gtk_text_iter_get_slice: extern func(start,end: TextIter) -> GChar*
 gtk_text_iter_get_text: extern func(start,end: TextIter) -> GChar*
 gtk_text_iter_get_visible_slice: extern func(start,end: TextIter) -> GChar*

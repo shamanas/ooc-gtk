@@ -30,32 +30,41 @@ TextView: cover from GtkTextView* extends Container {
     /**
      * Create a new TextView from a TextBuffer
      */
-    //new: static extern(gtk_text_view_new_with_buffer) func ~withBuffer -> This
+    new: static extern(gtk_text_view_new_with_buffer) func ~withBuffer -> This
 
     /**
      * Set the TextView's buffer
      */
-    //setBuffer: extern(gtk_text_view_set_buffer) func(buffer: TextBuffer)
+    setBuffer: extern(gtk_text_view_set_buffer) func(buffer: TextBuffer)
 
     /**
      * Get the TextView's buffer
      */
-    //getBuffer: extern(gtk_text_view_get_buffer) func -> TextBuffer
+    getBuffer: extern(gtk_text_view_get_buffer) func -> TextBuffer
+
+    buffer: TextBuffer {
+        get {
+            getBuffer()
+        }
+        set(buffer: TextBuffer) {
+            setBuffer(buffer)
+        }
+    }
 
     /**
      * Scroll the TextView to mark
      */
-    //scrollToMark: extern(gtk_text_view_scroll_to_mark) func(mark: TextMark, margin: GDouble, align?: Bool, xalign,yalign: GDouble)
+    scrollToMark: extern(gtk_text_view_scroll_to_mark) func(mark: TextMark, margin: GDouble, align?: Bool, xalign,yalign: GDouble)
 
     /**
      * Scroll the TextView to iterator
      */
-    //scrollToIter: extern(gtk_text_view_scroll_to_iter) func(iter: TextIter, margin: GDouble, align?: Bool, xalign,yalign: GDouble) -> Bool
+    scrollToIter: extern(gtk_text_view_scroll_to_iter) func(iter: TextIter, margin: GDouble, align?: Bool, xalign,yalign: GDouble) -> Bool
 
     /**
      * Scrolls TextView the minimum distance such that mark is contained within the visible area of the widget
      */
-    //scrollMarkOnScreen: extern(gtk_text_view_scroll_mark_onscreen) func(mark: TextMark)
+    scrollMarkOnScreen: extern(gtk_text_view_scroll_mark_onscreen) func(mark: TextMark)
 
     /**
      * Moves a mark within the buffer so that it's located within the currently-visible text area
