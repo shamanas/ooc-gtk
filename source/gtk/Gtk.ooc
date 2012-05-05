@@ -66,6 +66,35 @@ Justification: extern(GtkJustification) enum {
     fill: extern(GTK_JUSTIFY_FILL)
 }
 
+Quark: cover from GQuark {
+    fromString: static extern(g_quark_from_string) func(CString) -> This
+    fromStaticString: static extern(g_quark_from_static_string) func(CString) -> This
+
+    toString: extern(g_quark_to_string) func -> CString
+    tryString: static extern(g_quark_try_string) func(CString) -> This
+}
+
+GError: cover from GError {
+    domain: extern Quark
+    code: extern Int
+    message: extern CString
+
+    new: static extern(g_error_new) func(domain: Quark, code: Int, fromat: CString, ...) -> This*
+    new: static extern(g_error_new_literal) func~literal(domain: Quark, code: Int, message: CString) -> This*
+    new: static extern(g_error_new_valist) func~vaList(domain: Quark, code: Int, format: CString, args: VaList) -> This*
+
+    free: extern(g_error_free) func@
+    copy: extern(g_error_copy) func@ -> This
+    matches?: extern(g_error_matches) func@(domain: Quark, code: Int) -> Bool
+
+    set: static extern(g_set_error) func(err: This**, domain: Quark, code: Int, format: CString, ...)
+    set: static extern(g_set_error_literal) func~literal(err: This**, domain: Quark, code: Int, message: CString)
+    propagate: static extern(g_propagate_error) func(dest: This**, src: This)
+    clear: static extern(g_clear_error) func(err: This**)
+    prefix: static extern(g_prefix_error) func(err: This**, format: CString, ...)
+    propagatePrefixed: static extern(g_propagate_prefixed_error) func(dest: This**, src: This*, format: CString, ...)
+}
+
 GBool: cover from gboolean extends Bool
 GInt: cover from gint extends SSizeT
 GUInt: cover from guint extends SizeT

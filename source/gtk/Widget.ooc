@@ -1,5 +1,5 @@
 use gdk, gtk
-import gtk/[Gtk, _GObject, Window]
+import gtk/[Gtk, _GObject, Window, AccelGroup]
 import gdk/Drawable
 
 Adjustment: cover from GtkAdjustment* extends _GObject {
@@ -82,6 +82,7 @@ WidgetStruct: cover from GtkWidget {
 	window: extern GdkWindow*
 	allocation: extern GtkAllocation
 }
+
 
 /**
  * A GTK widget, such as a Button, a Label, a Checkbox
@@ -197,8 +198,373 @@ Widget: cover from WidgetStruct* extends _GObject {
 	}
 	*/
 
-        addEvents: extern(gtk_widget_add_events) func (events: GdkEventMask)
+    addEvents: extern(gtk_widget_add_events) func (events: GdkEventMask)
+
+    // TODO: add docs below
+    destroyed: extern(gtk_widget_destroyed) func(widgetPointer: This*)
+    set: extern(gtk_widget_set) func(firstProp: CString, ...)
+    unparent: extern(gtk_widget_unparent) func
+    showNow: extern(gtk_widget_show_now) func
+    hideAll: extern(gtk_widget_hide_all) func
+    map: extern(gtk_widget_map) func
+    unmap: extern(gtk_widget_unmap) func
+    unrealize: extern(gtk_widget_unrealize) func
+    queueDraw: extern(gtk_widget_queue_draw) func
+    queueResize: extern(gtk_widget_queue_resize) func
+    queueResizeNoRedraw: extern(gtk_widget_queue_resize_no_redraw) func
+    //draw: extern(gtk_widget_draw) func(area: GdkRectangle*) func
+    //sizeRequest: extern(gtk_widget_size_request) func(requisition: Requisition)
+    //getChildRequisition: extern(gtk_widget_get_child_requsition) func(requisition: Requisition)
+    //sizeAllocate: extern(gtk_widget_size_allocate) func(allocation: Allocation)
+    /*addAccelerator: func(signal: String, group: AccelGroup, key: UInt, mods: GdkModifierType, flags: AccelFlags) {
+        gtk_widget_add_accelerator(this, signal, group, key, mods, flags)
+    }*/
+    //removeAccelerator: extern(gtk_widget_remove_accelerator) func(group: AccelGroup, key: UInt, mods: GdkModifierType)
+    setAccelPath: func(path: String, group: AccelGroup) {
+        gtk_widget_set_accel_path(this, path, group)
+    }
+    //listAccelClosures: extern(gtk_widget_list_accel_closures) func -> GList
+    canActivateAccel?: extern(gtk_widget_can_activate_accel) func(signalId: UInt) -> Bool
+    //event?: extern(gtk_widget_event) func(event: GdkEvent) -> Bool
+    activate: extern(gtk_widget_activate) func -> Bool
+    reparent: extern(gtk_widget_reparent) func(newParent: This)
+    intersect: extern(gtk_widget_intersect) func~pointer(area,intersection: GdkRectangle*) -> Bool
+    intersect: func~returnsTuple(area: GdkRectangle*) -> (GdkRectangle, Bool) {
+        intersection: GdkRectangle
+        ret := intersect~pointer(area, intersection&)
+        (intersection, ret)
+    }
+    isFocus?: extern(gtk_widget_is_focus) func -> Bool
+    grabFocus: extern(gtk_widget_grab_focus) func
+    grabDefault: extern(gtk_widget_grab_default) func
+
+    setName: func(name: String) {
+        gtk_widget_set_name(name)
+    }
+    getName: extern(gtk_widget_get_name) func -> CString
+    name: String {
+        get {
+            getName() toString()
+        }
+        set(name) {
+            setName(name)
+        }
+    }
+
+    //setState: extern(gtk_widget_set_state) func(state: StateType)
+    setParent: extern(gtk_widget_set_parent) func(parent: This)
+
+    setParentWindow: extern(gtk_widget_set_parent_window) func(parentWin: Window)
+    getParentWindow: extern(gtk_widget_get_parent_window) func -> Window
+    parentWindow: Window {
+        get {
+            getParentWindow()
+        }
+        set(parentWindow) {
+            setParentWindow(parentWindow)
+        }
+    }
+
+    setUPosition: extern(gtk_widget_set_uposition) func(x,y: Int)
+    setUSize: extern(gtk_widget_set_usize) func(width,height: Int)
+
+    setEvents: extern(gtk_widget_set_events) func(events: Int)
+    getEvents: extern(gtk_widget_get_events) func -> Int
+    events: Int {
+        get {
+            getEvents()
+        }
+        set(events) {
+            setEvents(events)
+        }
+    }
+    addEvents: extern(gtk_widget_add_events) func(events: Int)
+
+    //setExtensionEvents: extern(gtk_widget_set_extension_events) func(mode: GdkExtensionMode)
+    //getExtensionEvents: extern(gtk_widget_get_extension_events) func -> GdkExtensionMode
+    /*extenstionEvents: GdkExtensionMode {
+        get {
+            getExtensionEvents()
+        }
+        set(mode) {
+            setExtensionEvents(mode)
+        }
+    }*/
+
+    getTopLevel: extern(gtk_widget_get_toplevel) func -> This
+    //getAncestor: extern(gtk_widget_get_ancestor) func(type: GType) -> This
+
+    //getColormap: extern(gtk_widget_get_colormap) func -> GdkColormap
+    //setColormap: extern(gtk_widget_set_colormap) func(colormap: GdkColormap)
+    /*colormap: GdkColormap {
+        get {
+            getColormap()
+        }
+        set(colormap) {
+            setColormap(colormap)
+        }
+    }*/
+
+    //getVisual: extern(gtk_widget_get_visual) -> GdkVisual
+    getPointer: extern(gtk_widget_get_pointer) func~pointers(x,y: Int*)
+    getPointer: func~returnsTuple -> (Int, Int) {
+        x,y: Int
+        getPointer~pointers(x&, y&)
+        (x, y)
+    }
+
+    isAncestor?: extern(gtk_widget_is_ancestor) func(acenstor: This) -> Bool
+    translateCoordinates: extern(gtk_widget_translate_coordinate) func~raw(dest: This, srcX,srcY: Int, destX,destY: Int*) -> Bool
+    translateCoordinates: func~returnsTuple(dest: This, srcX,srcY: Int) -> (Int, Int, Bool) {
+        destX, destY: Int
+        ret := translateCoordinates~raw(dest, srcX, srcY, destX&, destY&)
+        (destX, destY, ret)
+    }
+    hideOnDelete: extern(gtk_widget_hide_on_delete) func -> Bool
+
+    //setStyle: extern(gtk_widget_set_style) func(style: Style)
+    //getStyle: extern(gtk_widget_get_style) func -> Style
+    /*style: Style {
+        get {
+            getStyle()
+        }
+        set(style) {
+            setStyle(style)
+        }
+    }*/
+
+    ensureStyle: extern(gtk_widget_ensure_style) func
+    resetRcStyles: extern(gtk_widget_reset_rc_styles) func
+    //pushColormap: static extern(gtk_widget_push_colormap) func(cmap: GdkColormap)
+    popColormap: static extern(gtk_widget_pop_colormap) func
+
+    //setDefaultColormap: static extern(gtk_widget_set_default_colormap) func(colormap: GdkColormap)
+    //getDefaultColormap: static extern(gtk_widget_get_default_colormap) func -> GdkColormap
+    /*defaultColormap: static GdkColormap {
+        get {
+            getDefaultColormap()
+        }
+        set(cmap) {
+            setDefaultColormap(cmap)
+        }
+    }*/
+
+    //getDefaultStyle: static extern(gtk_widget_get_default_style) func -> Style
+    //getDefaultVisual: static extern(gtk_widget_get_default_visual) func -> GdkVisual
+
+    setDirection: extern(gtk_widget_set_direction) func(dir: TextDirection)
+    getDirection: extern(gtk_widget_get_direction) func -> TextDirection
+    direction: TextDirection {
+        get {
+            getDirection()
+        }
+        set(dir) {
+            setDirection(dir)
+        }
+    }
+
+    setDefaultDirection: static extern(gtk_widget_set_default_direction) func(dir: TextDirection)
+    getDefaultDirection: static extern(gtk_widget_get_default_direction) func -> TextDirection
+    defaultDirection: static TextDirection {
+        get {
+            getDefaultDirection()
+        }
+        set(dir) {
+            setDefaultDirection(dir)
+        }
+    }
+
+    //shapeCombineMask: extern(gtk_widget_shape_combine_mask) func(shapeMask: GdkBitmap, offX,offY: Int)
+    //inputShapeCombineMask: extern(gtk_widget_input_shape_combine_mask) func(shapeMask: GdkBitmap, offX,offY: Int)
+    path: extern(gtk_widget_path) func~raw(length: UInt*, path: CString*, pathReversed: CString*)
+    path: func~oocstring -> (String[], String[]) {
+        length: UInt
+        cPath, cPathReversed: CString*
+        path~raw(length&, cPath, cPathReversed)
+        path, pathReserved: String[length]
+        for(i in 0 .. length) {
+            path[i] = cPath[i] toString()
+            pathReversed[i] = cPathReversed[i] toString()
+        }
+        (path, pathReserved)
+    }
+    classPath: extern(gtk_widget_class_path) func~raw(length: UInt*, path: CString*, pathReversed: CString*)
+    classPath: func~oocstring -> (String[], String[]) {
+        length: UInt
+        cPath, cPathReversed: CString*
+        path~raw(length&, cPath, cPathReversed)
+        path, pathReserved: String[length]
+        for(i in 0 .. length) {
+            path[i] = cPath[i] toString()
+            pathReversed[i] = cPathReversed[i] toString()
+        }
+        (path, pathReserved)
+    }
+
+    getCompositeName: extern(gtk_widget_get_composite_name) func -> CString
+    //modifyStyle: extern(gtk_widget_modify_style) func(style: RcStyle)
+    //getModifierStyle: extern(gtk_widget_get_modifier_style) func -> RcStyle
+    //modifyFg: extern(gtk_widget_modify_fg) func(state: StateType, color: GdkColor)
+    //modifyBg: extern(gtk_widget_modify_bg) func(state: StateType, color: GdkColor)
+    //modifyText: extern(gtk_widget_modify_text) func(state: StateType, color: GdkColor)
+    //modifyBase: extern(gtk_widget_modify_text) func(state: StateType, color: GdkColor)
+    //modifyCursor: extern(gtk_widget_modify_cursor) func(primary, secondary: GdkColor)
+        
+    //modifyFont: extern(gtk_widget_modify_font) func(fontDesc: PangoFontDescription)
+    //createPangoContext: extern(gtk_widget_create_pango_context) func -> PangoContext
+    //getPangoContext: extern(gtk_widget_get_pango_context) func -> PangoContext
+    /*createPangoLayout: func(text: String) -> PangoLayout {
+        gtk_widget_create_pango_layout(this, text)
+    }*/
+
+    /*renderIcon: func(stockId: String, size: IconSize, detail: String) {
+        gtk_widget_render_icon(this, stockId, size, detail)
+    }*/
+
+    pushCompositeChild: static extern(gtk_push_composite_child) func
+    popCompositeChild: static extern(gtk_pop_composite_child) func
+    queueClear: extern(gtk_widget_queue_clear) func
+    queueClearArea: extern(gtk_widget_queue_clear_area) func(x,y,width,height: Int)
+    queueDrawArea: extern(gtk_widget_queue_draw_area) func(x,y,width,height: Int)
+    resetShapes: extern(gtk_widget_reset_shapes) func
+    setDoubleBuffered: extern(gtk_widget_set_double_buffered) func(dbuff: Bool)
+    setRedrawOnAllocate: extern(gtk_widget_set_redraw_on_allocate) func(redrawOnAllocate: Bool)
+    setCompositeName: func(name: String) {
+        gtk_widget_set_composite_name(this, name)
+    }
+    setScrollAdjustments: extern(gtk_widget_set_scroll_adjustments) func(hadj,vadj: Adjustment) -> Bool
+    mnemonicActivate: extern(gtk_widget_mnemonic_activate) func(groupCycling: Bool) -> Bool
+    //regionIntersect: extern(gtk_widget_region_intersect) func(region: GdkRegion) -> GdkRegion
+    //sendExpose: extern(gtk_widget_send_expose) func(event: GdkEvent) -> Int
+    //sendFocusChange: extern(gtk_widget_send_focus_change) func(event: GdkEvent) -> Bool
+    styleGet: extern(gtk_widget_style_get) func(firstPropertyName: CString, ...)
+    getProperty: extern(gtk_widget_style_get_property) func(propertyName: CString, value: Pointer)
+    styleGetVaList: extern(gtk_widget_style_get_valist) func(firstPropertyName: CString, vaArgs: VaList)
+    styleAttach: extern(gtk_widget_style_attach) func
+    //getAccessible: extern(gtk_widget_get_accessible) func -> AtkObject
+    //childFocus: extern(gtk_widget_child_focus) func(direction: DirectionType) -> Bool
+    childNotify: func(prop: String) {
+        gtk_widget_child_notify(oro)
+    }
+    getChildVisible?: extern(gtk_widget_get_child_visible) func -> Bool
+    getParent: extern(gtk_widget_get_parent) func -> This
+    //getSettings: extern(gtk_widget_get_settigs) func -> Settings
+    //getClipboard: extern(gtk_widget_get_clipboard) func(selection: GdkAtom) -> Clipboard
 }
+
+//gtk_widget_add_accelerator: extern func(Widget, CString, AccelGroup, UInt, GdkModifierType, AccelFlags)
+gtk_widget_set_accel_path: extern func(Widget, CString, AccelGroup)
+gtk_widget_set_name: extern func(Widget, CString)
+//gtk_widget_create_pango_layout: extern func(Widget, CString) -> PangoLayout
+//gtk_widget_render_icon: extern func(Widget, CString, IconSize, CString) -> GdkPixbuf
+gtk_widget_set_composite_name: extern func(Widget, CString)
+gtk_widget_child_notify: extern func(Widget, CString)
+
+GdkDisplay *        gtk_widget_get_display              (GtkWidget *widget);
+GdkWindow *         gtk_widget_get_root_window          (GtkWidget *widget);
+GdkScreen *         gtk_widget_get_screen               (GtkWidget *widget);
+gboolean            gtk_widget_has_screen               (GtkWidget *widget);
+void                gtk_widget_get_size_request         (GtkWidget *widget,
+                                                         gint *width,
+                                                         gint *height);
+#define             gtk_widget_pop_visual
+#define             gtk_widget_push_visual              (visual)
+void                gtk_widget_set_child_visible        (GtkWidget *widget,
+                                                         gboolean is_visible);
+#define             gtk_widget_set_default_visual       (visual)
+void                gtk_widget_set_size_request         (GtkWidget *widget,
+                                                         gint width,
+                                                         gint height);
+#define             gtk_widget_set_visual               (widget,
+                                                         visual)
+void                gtk_widget_thaw_child_notify        (GtkWidget *widget);
+void                gtk_widget_set_no_show_all          (GtkWidget *widget,
+                                                         gboolean no_show_all);
+gboolean            gtk_widget_get_no_show_all          (GtkWidget *widget);
+GList *             gtk_widget_list_mnemonic_labels     (GtkWidget *widget);
+void                gtk_widget_add_mnemonic_label       (GtkWidget *widget,
+                                                         GtkWidget *label);
+void                gtk_widget_remove_mnemonic_label    (GtkWidget *widget,
+                                                         GtkWidget *label);
+GtkAction *         gtk_widget_get_action               (GtkWidget *widget);
+gboolean            gtk_widget_is_composited            (GtkWidget *widget);
+void                gtk_widget_error_bell               (GtkWidget *widget);
+gboolean            gtk_widget_keynav_failed            (GtkWidget *widget,
+                                                         GtkDirectionType direction);
+gchar *             gtk_widget_get_tooltip_markup       (GtkWidget *widget);
+void                gtk_widget_set_tooltip_markup       (GtkWidget *widget,
+                                                         const gchar *markup);
+gchar *             gtk_widget_get_tooltip_text         (GtkWidget *widget);
+void                gtk_widget_set_tooltip_text         (GtkWidget *widget,
+                                                         const gchar *text);
+GtkWindow *         gtk_widget_get_tooltip_window       (GtkWidget *widget);
+void                gtk_widget_set_tooltip_window       (GtkWidget *widget,
+                                                         GtkWindow *custom_window);
+gboolean            gtk_widget_get_has_tooltip          (GtkWidget *widget);
+void                gtk_widget_set_has_tooltip          (GtkWidget *widget,
+                                                         gboolean has_tooltip);
+void                gtk_widget_trigger_tooltip_query    (GtkWidget *widget);
+GdkPixmap *         gtk_widget_get_snapshot             (GtkWidget *widget,
+                                                         GdkRectangle *clip_rect);
+GdkWindow *         gtk_widget_get_window               (GtkWidget *widget);
+void                gtk_widget_get_allocation           (GtkWidget *widget,
+                                                         GtkAllocation *allocation);
+void                gtk_widget_set_allocation           (GtkWidget *widget,
+                                                         const GtkAllocation *allocation);
+gboolean            gtk_widget_get_app_paintable        (GtkWidget *widget);
+gboolean            gtk_widget_get_can_default          (GtkWidget *widget);
+void                gtk_widget_set_can_default          (GtkWidget *widget,
+                                                         gboolean can_default);
+gboolean            gtk_widget_get_can_focus            (GtkWidget *widget);
+void                gtk_widget_set_can_focus            (GtkWidget *widget,
+                                                         gboolean can_focus);
+gboolean            gtk_widget_get_double_buffered      (GtkWidget *widget);
+gboolean            gtk_widget_get_has_window           (GtkWidget *widget);
+void                gtk_widget_set_has_window           (GtkWidget *widget,
+                                                         gboolean has_window);
+gboolean            gtk_widget_get_sensitive            (GtkWidget *widget);
+gboolean            gtk_widget_is_sensitive             (GtkWidget *widget);
+GtkStateType        gtk_widget_get_state                (GtkWidget *widget);
+gboolean            gtk_widget_get_visible              (GtkWidget *widget);
+void                gtk_widget_set_visible              (GtkWidget *widget,
+                                                         gboolean visible);
+gboolean            gtk_widget_has_default              (GtkWidget *widget);
+gboolean            gtk_widget_has_focus                (GtkWidget *widget);
+gboolean            gtk_widget_has_grab                 (GtkWidget *widget);
+gboolean            gtk_widget_has_rc_style             (GtkWidget *widget);
+gboolean            gtk_widget_is_drawable              (GtkWidget *widget);
+gboolean            gtk_widget_is_toplevel              (GtkWidget *widget);
+void                gtk_widget_set_window               (GtkWidget *widget,
+                                                         GdkWindow *window);
+void                gtk_widget_set_receives_default     (GtkWidget *widget,
+                                                         gboolean receives_default);
+gboolean            gtk_widget_get_receives_default     (GtkWidget *widget);
+void                gtk_widget_set_realized             (GtkWidget *widget,
+                                                         gboolean realized);
+gboolean            gtk_widget_get_realized             (GtkWidget *widget);
+void                gtk_widget_set_mapped               (GtkWidget *widget,
+                                                         gboolean mapped);
+gboolean            gtk_widget_get_mapped               (GtkWidget *widget);
+void                gtk_widget_get_requisition          (GtkWidget *widget,
+                                                         GtkRequisition *requisition);
+
+void                gtk_widget_class_install_style_property
+                                                        (GtkWidgetClass *klass,
+                                                         GParamSpec *pspec);
+void                gtk_widget_class_install_style_property_parser
+                                                        (GtkWidgetClass *klass,
+                                                         GParamSpec *pspec,
+                                                         GtkRcPropertyParser parser);
+GParamSpec *        gtk_widget_class_find_style_property
+                                                        (GtkWidgetClass *klass,
+                                                         const gchar *property_name);
+GParamSpec **       gtk_widget_class_list_style_properties
+                                                        (GtkWidgetClass *klass,
+                                                         guint *n_properties);
+
+
+GtkRequisition *    gtk_requisition_copy                (const GtkRequisition *requisition);
+void                gtk_requisition_free                (GtkRequisition *requisition);
 
 GdkEventMask: enum {
   EXPOSURE_MASK           = 1 << 1,

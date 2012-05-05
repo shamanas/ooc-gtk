@@ -18,7 +18,7 @@ TextChildAnchor: cover from GtkTextChildAnchor* {
     deleted?: extern(gtk_text_child_anchor_get_deleted) func -> Bool
 }
 
-// Need TextBuffer, TextMark, TextIter, GList, PangoTabArray, Adjustment, GSList, TextAttributes, TextTagTable, TextTag, ClipBoard, GdkAtom, GError, GtkTargetList for complete class
+// Need GList, PangoTabArray, GSList, ClipBoard, GdkAtom, GError, GtkTargetList for complete class
 
 TextView: cover from GtkTextView* extends Container {
 

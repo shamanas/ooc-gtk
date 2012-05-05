@@ -2,9 +2,7 @@ use gtk
 import gtk/[TextBuffer, Gtk, TextView, TextTag, _GObject]
 
 TextMark: cover from GtkTextMark*  extends _GObject {
-    new: static func(name: String, leftGravity: Bool) -> This {
-        gtk_text_mark_new(name, leftGravity)
-    }
+    new: static extern(gtk_text_mark_new) func(name: CString, leftGravity: Bool) -> This
 
     setVisible?: extern(gtk_text_mark_set_visible) func(setting: Bool)
     getVisible?: extern(gtk_text_mark_get_visible) func -> Bool
@@ -72,30 +70,22 @@ TextIter: cover from GtkTextIter* {
     /**
      * Returns the text in the given range. A "slice" is an array of characters encoded in UTF-8 format, including the Unicode "unknown" character 0xFFFC for iterable non-character elements in the buffer, such as images. Because images are encoded in the slice, byte and character offsets in the returned array will correspond to byte offsets in the text buffer. Note that 0xFFFC can occur in normal text as well, so it is not a reliable indicator that a pixbuf or widget is in the buffer.
      */
-    getSlice: func(end: TextIter) -> String {
-        gtk_text_iter_get_slice(this,end) as CString toString()
-    }
+    getSlice: extern(gtk_text_iter_get_slice) func(end: TextIter) -> CString
 
     /**
      * Returns text in the given range. If the range contains non-text elements such as images, the character and byte offsets in the returned string will not correspond to character and byte offsets in the buffer.
      */
-    getText: func(end: TextIter) -> String {
-        gtk_text_iter_get_slice(this,end) as CString toString()
-    }
+    getText: extern(gtk_text_iter_get_text) func(end: TextIter) -> CString
 
     /**
      * Like TextIter getSlice, but invisible text is not included. Invisible text is usually invisible because a TextTag with the "invisible" attribute turned on has been applied to it.
      */
-    getVisibleSlice: func(end: TextIter) -> String {
-        gtk_text_iter_get_visible_slice(this,end) as CString toString()
-    }
+    getVisibleSlice: extern(gtk_text_iter_get_visible_slice) func(end: TextIter) -> CString
 
     /**
      * You really want doc for this one? -.-
      */
-    getVisibleText: func(end: TextIter) -> String {
-        gtk_text_iter_get_visible_text(this,end) as CString toString()
-    }
+    getVisibleText: extern(gtk_text_iter_get_visible_text) func(end: TextIter) -> CString
 
     /*
      * If the element at iter is a pixbuf, the pixbuf is returned (with no new reference count added). Otherwise, null is returned.
@@ -318,9 +308,3 @@ TextIter: cover from GtkTextIter* {
 
 operator == (l,r: TextIter) -> Bool { l equals?(r) }
 operator <=> (l,r: TextIter) -> Int { l compare(r) }
-
-gtk_text_mark_new: extern func(CString, Bool) -> TextMark
-gtk_text_iter_get_slice: extern func(start,end: TextIter) -> GChar*
-gtk_text_iter_get_text: extern func(start,end: TextIter) -> GChar*
-gtk_text_iter_get_visible_slice: extern func(start,end: TextIter) -> GChar*
-gtk_text_iter_get_visible_text: extern func(start,end: TextIter) -> GChar*

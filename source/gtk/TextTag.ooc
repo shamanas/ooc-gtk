@@ -50,9 +50,7 @@ TextAttributes: cover from GtkTextAttributes {
 }
 
 TextTag: cover from GtkTextTag* extends _GObject {
-    new: static func(name: String) -> This {
-        gtk_text_tag_new(name)
-    }
+    new: static extern(gtk_text_tag_new) func(name: CString) -> This
 
     getPriority: extern(gtk_text_tag_get_priority) func -> Int
     setPriority: extern(gtk_text_tag_set_priority) func(priority: Int)
@@ -72,9 +70,7 @@ TextTagTable: cover from GtkTextTagTable* extends _GObject {
     new: static extern(gtk_text_tag_table_new) func -> This
     add: extern(gtk_text_tag_table_add) func(tag: TextTag)
     remove: extern(gtk_text_tag_table_remove) func(tag: TextTag)
-    lookup: func(name: String) -> TextTag {
-        gtk_text_tag_table_lookup(this, name)
-    }
+    lookup: extern(gtk_text_table_lookup) func(name: CString) -> TextTag
 
     // Raw C function
     each: extern(gtk_text_tag_table_foreach) func~raw(f: Pointer, data: Pointer)
@@ -89,4 +85,3 @@ TextTagTable: cover from GtkTextTagTable* extends _GObject {
 }
 
 gtk_text_tag_table_lookup: extern func(TextTagTable, CString) -> TextTag
-gtk_text_tag_new: extern func(CString) -> TextTag

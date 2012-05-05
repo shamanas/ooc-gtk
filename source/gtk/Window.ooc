@@ -31,14 +31,12 @@ Window: cover from WindowStruct* extends Container {
 	/**
 	 * Change the title of this window
 	 */
-	setTitle: func (title: String) { gtk_window_set_title(this, title) }
+	setTitle: extern(gtk_window_set_title) func (title: CString)
 
-        setPosition: extern(gtk_window_set_position) func (position: GtkWindowPosition)
+    setPosition: extern(gtk_window_set_position) func (position: GtkWindowPosition)
 	
 	addAccelGroup: extern(gtk_window_add_accel_group) func (accelGroup: AccelGroup)
 	
 }
 
 GTK_WINDOW_TOPLEVEL: extern Int
-gtk_window_new: extern func (Int) -> Window
-gtk_window_set_title: extern func (Window, CString)
